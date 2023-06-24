@@ -1,119 +1,114 @@
-const functions = require("firebase-functions");
+const functions = require('firebase-functions');
+const packageJson = require('./package.json');
 
-const admin = require("firebase-admin");
-const serviceAccount = require("./config/serviceAccountKey.json");
+const express = require('express');
+const cors = require('cors');
+const {
+  notFound,
+  errorHandlerMiddleware,
+} = require('./middleware');
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://quebecs-system-default-rtdb.asia-southeast1.firebasedatabase.app",
-});
-
-const express = require("express");
-const cors = require("cors");
-const db = admin.firestore();
+const routes = require('./routes');
 
 const app = express();
-app.use(cors({origin: true}));
+app.use(cors({ origin: true }));
 
-app.get("/", (req, res) => {
-  return res.status(200).send("hello");
+app.get('/ver', (req, res, next) => {
+  req.ext = {};
+
+  res.send({
+    name: packageJson.name,
+    version: packageJson.version,
+    description: packageJson.description,
+  });
+
+  return next();
 });
 
-app.post("/order/create", (req, res) => {
-  ( async () => {
-    try {
-      await db.collection("orders").doc(`/${Date.now()}`).create({
-        id: Date.now(),
-        name: req.body.name,
-      });
+app.put('/order', routes.order.createOrder);
 
-      return res.status(200).send("success");
-    } catch (error) {
-      console.log(error);
-      return res.status(500).send("fail");
-    }
-  })();
-});
 
-app.get("/order/:id", (req, res) => {
-  ( async () => {
-    try {
-      const {
-        id,
-      } = req.params;
+// app.get('/order/:id', (req, res) => {
+//   ( async () => {
+//     try {
+//       const {
+//         id,
+//       } = req.params;
 
-      const reqDoc = db.collection("orders").doc(id);
-      const order = await reqDoc.get();
-      const response = order.data();
+//       const reqDoc = db.collection('orders').doc(id);
+//       const order = await reqDoc.get();
+//       const response = order.data();
 
-      return res.status(200).send(response);
-    } catch (error) {
-      console.log(error);
-      return res.status(500).send("fail");
-    }
-  })();
-});
+//       return res.status(200).send(response);
+//     } catch (error) {
+//       console.log(error);
+//       return res.status(500).send('fail');
+//     }
+//   })();
+// });
 
-app.get("/orders/getAll", (req, res) => {
-  ( async () => {
-    try {
-      const query = db.collection("orders");
-      const response = [];
+// app.get('/orders/getAll', (req, res) => {
+//   ( async () => {
+//     try {
+//       const query = db.collection('orders');
+//       const response = [];
 
-      await query.get().then((data) => {
-        const docs = data.docs;
+//       await query.get().then((data) => {
+//         const docs = data.docs;
 
-        docs.map((doc) => {
-          const data = {
-            name: doc.data().name,
-          };
+//         docs.map((doc) => {
+//           const data = {
+//             name: doc.data().name,
+//           };
 
-          response.push(data);
-        });
-      });
+//           response.push(data);
+//         });
+//       });
 
-      return res.status(200).send(response);
-    } catch (error) {
-      console.log(error);
-      return res.status(500).send("fail");
-    }
-  })();
-});
+//       return res.status(200).send(response);
+//     } catch (error) {
+//       console.log(error);
+//       return res.status(500).send('fail');
+//     }
+//   })();
+// });
 
-app.post("/order/:id", (req, res) => {
-  ( async () => {
-    try {
-      const {
-        id,
-      } = req.params;
+// app.post('/order/:id', (req, res) => {
+//   ( async () => {
+//     try {
+//       const {
+//         id,
+//       } = req.params;
 
-      const reqDoc = db.collection("orders").doc(id);
-      await reqDoc.update({...req.body});
+//       const reqDoc = db.collection('orders').doc(id);
+//       await reqDoc.update({...req.body});
 
-      return res.status(200).send("success");
-    } catch (error) {
-      console.log(error);
-      return res.status(500).send("fail");
-    }
-  })();
-});
+//       return res.status(200).send('success');
+//     } catch (error) {
+//       console.log(error);
+//       return res.status(500).send('fail');
+//     }
+//   })();
+// });
 
-app.delete("/order/:id", (req, res) => {
-  ( async () => {
-    try {
-      const {
-        id,
-      } = req.params;
+// app.delete('/order/:id', (req, res) => {
+//   ( async () => {
+//     try {
+//       const {
+//         id,
+//       } = req.params;
 
-      const reqDoc = db.collection("orders").doc(id);
-      await reqDoc.delete();
+//       const reqDoc = db.collection('orders').doc(id);
+//       await reqDoc.delete();
 
-      return res.status(200).send("success");
-    } catch (error) {
-      console.log(error);
-      return res.status(500).send("fail");
-    }
-  })();
-});
+//       return res.status(200).send('success');
+//     } catch (error) {
+//       console.log(error);
+//       return res.status(500).send('fail');
+//     }
+//   })();
+// });
+app.use(notFound);
+app.use(errorHandlerMiddleware);
 
 exports.app = functions.https.onRequest(app);
