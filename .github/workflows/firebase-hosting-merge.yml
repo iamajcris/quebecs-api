@@ -23,6 +23,6 @@ jobs:
       - name: 'Deploy Clound Functions'
         uses: 'google-github-actions/deploy-cloud-functions@v1'
         with:
-          repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_QUEBECS_SYSTEM }}'
-          name: quebecs-system
+          name: 'quebecs-api'
+          runtime: 'nodejs16'
+          projectId: quebecs-system
