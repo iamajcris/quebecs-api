@@ -21,8 +21,4 @@ jobs:
       - name: Build Cloud Functions
         run: cd functions && npm install
       - name: 'Deploy Clound Functions'
-        uses: 'google-github-actions/deploy-cloud-functions@v1'
-        with:
-          name: 'quebecs-api'
-          runtime: 'nodejs18'
-          project_id: quebecs-system
+        run: 'cd functions && npm run deploy'
