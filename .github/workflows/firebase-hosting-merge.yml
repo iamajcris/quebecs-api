@@ -25,5 +25,4 @@ jobs:
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_QUEBECS_SYSTEM }}'
-          channelId: live
-          projectId: quebecs-system
+          name: quebecs-system
