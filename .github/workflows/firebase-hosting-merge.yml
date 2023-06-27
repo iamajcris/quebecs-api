@@ -24,5 +24,4 @@ jobs:
         uses: 'google-github-actions/deploy-cloud-functions@v1'
         with:
           name: 'quebecs-api'
-          runtime: 'nodejs16'
-          projectId: quebecs-system
+          runtime: 'nodejs18'
