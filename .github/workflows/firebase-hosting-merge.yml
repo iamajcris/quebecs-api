@@ -15,7 +15,12 @@ jobs:
     permissions: write-all
     steps:
       - uses: actions/checkout@v3
-      - id: 'deploy'
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Build Cloud Functions
+        run: cd functions && npm ci
+      - name: 'Deploy Clound Functions'
         uses: 'google-github-actions/deploy-cloud-functions@v1'
         with:
           name: 'quebecs-system'
