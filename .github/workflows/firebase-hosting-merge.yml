@@ -19,7 +19,7 @@ jobs:
         with:
           node-version: 18
       - name: Build Cloud Functions
-        run: cd functions && npm ci
+        run: cd functions && npm install
       - name: 'Deploy Clound Functions'
         uses: 'google-github-actions/deploy-cloud-functions@v1'
         with:
