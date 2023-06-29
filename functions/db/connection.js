@@ -11,5 +11,5 @@ function connectDB() {
 }
 
 module.exports = {
-  db: connectDB(),
+  connectDB,
 };

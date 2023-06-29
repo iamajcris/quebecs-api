@@ -1,8 +1,6 @@
 
-const notFound = require('./not-found');
-const errorHandlerMiddleware = require('./error-handler');
+const { generateRefs } = require('./reference');
 
 module.exports = {
-  notFound,
-  errorHandlerMiddleware,
+  generateRefs,
 };

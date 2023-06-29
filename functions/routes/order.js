@@ -1,12 +1,23 @@
 const {
   create,
   update,
-} = require('./crud');
+  retrieve,
+  deletion,
+} = require('../services').crud;
 
-const collection = 'orders';
+const { collection } = require('../db');
 
-const createOrder = create(collection);
+const createOrder = create(collection.Order);
+
+const updateOrder = update(collection.Order);
+
+const getOrder = retrieve(collection.Order);
+
+const deleteOrder = deletion(collection.Order);
 
 module.exports = {
   createOrder,
+  updateOrder,
+  getOrder,
+  deleteOrder,
 };
