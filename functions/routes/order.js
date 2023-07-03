@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const {
   create,
   update,
@@ -15,9 +16,15 @@ const getOrder = retrieve(collection.Order);
 
 const deleteOrder = deletion(collection.Order);
 
+function retrieveOrder(req, res, next) {
+  res.status(200).send(_.last(req.preload.order));
+  next();
+}
+
 module.exports = {
   createOrder,
   updateOrder,
   getOrder,
   deleteOrder,
+  retrieveOrder,
 };

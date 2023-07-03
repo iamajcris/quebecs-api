@@ -3,8 +3,9 @@ const { db, collection } = require('../db');
 const { FieldValue } = require('firebase-admin/firestore');
 
 const transform = {
-  order: (serial) => `Q1${_.padStart(serial, 6, '0')}`,
-  customer: (serial) => `1${_.padStart(serial, 6, '0')}`,
+  order: (serial) => `1${_.padStart(serial, 6, '0')}`,
+  customer: (serial) => `2${_.padStart(serial, 6, '0')}`,
+  menu: (serial) => `3${_.padStart(serial, 6, '0')}`,
 };
 
 const increment = (serial) => _.parseInt(serial) + 1;
