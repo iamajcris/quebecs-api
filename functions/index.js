@@ -32,5 +32,6 @@ app.get('/order/:id', routes.order.getOrder);
 app.delete('/order/:id', routes.order.deleteOrder);
 
 app.get('/orders/:id', preloadOrder(), routes.order.retrieveOrder);
+app.get('/orders', routes.order.listOrders);
 
 exports.app = functions.https.onRequest(app);

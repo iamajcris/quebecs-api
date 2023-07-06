@@ -4,6 +4,7 @@ const {
   update,
   retrieve,
   deletion,
+  list,
 } = require('../services').crud;
 
 const { collection } = require('../db');
@@ -17,9 +18,11 @@ const getOrder = retrieve(collection.Order);
 const deleteOrder = deletion(collection.Order);
 
 function retrieveOrder(req, res, next) {
-  res.status(200).send(_.last(req.preload.order));
+  res.status(200).send(_.head(req.preload.order));
   next();
 }
+
+const listOrders = list(collection.Order);
 
 module.exports = {
   createOrder,
@@ -27,4 +30,5 @@ module.exports = {
   getOrder,
   deleteOrder,
   retrieveOrder,
+  listOrders,
 };
