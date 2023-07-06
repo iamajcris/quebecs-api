@@ -1,16 +1,11 @@
-const moment = require('moment-timezone');
-const _ = require('lodash');
-
 const { db } = require('../db');
-const { timezone } = require('../config/default.json');
-const admin = require('firebase-admin');
 
-const getDateNow = () => moment.tz(new Date(), timezone);
+const { util } = require('../common');
 
 function create(Type) {
   return (req, res, next) => {
-    req.body.createdAt = getDateNow;
-    req.body.updatedAt = getDateNow;
+    req.body.createdAt = util.getDateNow();
+    req.body.updatedAt = util.getDateNow();
 
     return db.collection(Type).add(req.body)
       .then((rec) => {
@@ -40,7 +35,7 @@ function retrieve(Type) {
 
 function update(Type) {
   return (req, res, next) => {
-    req.body.updatedAt = getDateNow;
+    req.body.updatedAt = util.getDateNow();
 
     return db.collection(Type).doc(req.params.id)
       .update({...req.body})
@@ -58,7 +53,7 @@ function update(Type) {
 
 function deletion(Type) {
   return (req, res, next) => {
-    req.body.deletedAt = getDateNow;
+    req.body.deletedAt = util.getDateNow();
 
     return db.collection(Type).doc(req.params.id)
       .delete({...req.body})
@@ -96,15 +91,55 @@ function list(Type) {
         }
         const recs = [];
         snapshot.forEach((doc) => {
-          const data = doc.data();
-          _.mapValues(data, (value) => {
-            if (value && (value.seconds && value.nanoseconds)) {
-              console.log(moment.tz(value.seconds, timezone));
-            }
-          });
+          const data = util.formatSnapshot(doc.data());
+
           recs.push({
             id: doc.id,
-            ...doc.data(),
+            ...data,
+          });
+        });
+
+        res.status(200).send(recs);
+        return next();
+      });
+  };
+}
+
+function findByFieldValue(Type) {
+  return (req, res, next) => {
+    const {
+      field,
+      val,
+    } = req.params;
+
+    const {
+      p,
+      ps,
+    } = req.query;
+
+    const page = p || 0;
+    const pageSize = ps || 20;
+
+    return db.collection(Type)
+      .offset(Number(page) * Number(pageSize))
+      .limit(Number(pageSize))
+      .orderBy(field)
+      .startAt(val)
+      .endAt(val + '\uf8ff')
+      .get()
+      .then((snapshot) => {
+        if (snapshot.empty) {
+          res.status(200).send([]);
+          return next();
+        }
+        const recs = [];
+        snapshot.forEach((doc) => {
+          console.log(doc.data());
+          const data = util.formatSnapshot(doc.data());
+
+          recs.push({
+            id: doc.id,
+            ...data,
           });
         });
 
@@ -120,4 +155,5 @@ module.exports = {
   update,
   deletion,
   list,
+  findByFieldValue,
 };

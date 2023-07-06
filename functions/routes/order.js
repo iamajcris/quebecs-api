@@ -5,6 +5,7 @@ const {
   retrieve,
   deletion,
   list,
+  findByFieldValue,
 } = require('../services').crud;
 
 const { collection } = require('../db');
@@ -24,6 +25,8 @@ function retrieveOrder(req, res, next) {
 
 const listOrders = list(collection.Order);
 
+const findOrdersByFieldValue = findByFieldValue(collection.Order);
+
 module.exports = {
   createOrder,
   updateOrder,
@@ -31,4 +34,5 @@ module.exports = {
   deleteOrder,
   retrieveOrder,
   listOrders,
+  findOrdersByFieldValue,
 };

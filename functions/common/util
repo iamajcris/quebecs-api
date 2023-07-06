@@ -1,0 +1,18 @@
+const _ = require('lodash');
+const moment = require('moment-timezone');
+
+const { timezone } = require('../config/default.json');
+
+const formatSnapshot = (data) => _.mapValues(data, (value) => {
+  if (value && (value.seconds && value.nanoseconds)) {
+    return value.toDate();
+  }
+  return value;
+});
+
+const getDateNow = () => moment.tz(new Date(), timezone);
+
+module.exports = {
+  formatSnapshot,
+  getDateNow,
+};

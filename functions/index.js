@@ -30,8 +30,8 @@ app.post('/order', generateRefs('order'), routes.order.createOrder);
 app.put('/order/:id', routes.order.updateOrder);
 app.get('/order/:id', routes.order.getOrder);
 app.delete('/order/:id', routes.order.deleteOrder);
-
 app.get('/orders/:id', preloadOrder(), routes.order.retrieveOrder);
 app.get('/orders', routes.order.listOrders);
+app.get('/orders/:field/:val', routes.order.findOrdersByFieldValue);
 
 exports.app = functions.https.onRequest(app);
