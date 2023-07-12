@@ -10,8 +10,15 @@ const generateRefs = (entity) =>
         return Promise.resolve(req.body);
       });
 
+    const createMenuEntities = () => reference.create(entity)
+      .then(async (ident) => {
+        req.body.menuId = ident.serial;
+        return Promise.resolve(req.body);
+      });
+
     const mapper = {
       order: createOrderEntities,
+      menu: createMenuEntities,
     };
 
     if (mapper[entity]) {

@@ -22,7 +22,9 @@ function retrieve(Type) {
       id,
     } = req.params;
 
-    return db.collection(Type).doc(id).get()
+    return db.collection(Type)
+      .doc(id)
+      .get()
       .then((rec) => {
         if (!rec.exists) {
           return next(res.status(404));
@@ -37,7 +39,8 @@ function update(Type) {
   return (req, res, next) => {
     req.body.updatedAt = util.getDateNow();
 
-    return db.collection(Type).doc(req.params.id)
+    return db.collection(Type)
+      .doc(req.params.id)
       .update({...req.body})
       .then((rec) => {
         if (!rec) {
@@ -47,7 +50,7 @@ function update(Type) {
         res.status(200).send();
         return next();
       })
-      .catch(next(res.status(404)));
+      .catch((err) => next(res.status(404).send(err)));
   };
 }
 
@@ -55,7 +58,8 @@ function deletion(Type) {
   return (req, res, next) => {
     req.body.deletedAt = util.getDateNow();
 
-    return db.collection(Type).doc(req.params.id)
+    return db.collection(Type)
+      .doc(req.params.id)
       .delete({...req.body})
       .then((rec) => {
         res.status(200).send();

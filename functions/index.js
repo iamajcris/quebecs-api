@@ -34,4 +34,10 @@ app.get('/orders/:id', preloadOrder(), routes.order.retrieveOrder);
 app.get('/orders', routes.order.listOrders);
 app.get('/orders/:field/:val', routes.order.findOrdersByFieldValue);
 
+app.post('/menu', generateRefs('menu'), routes.menu.createMenu);
+app.put('/menu/:id', routes.menu.updateMenu);
+app.get('/menu/:id', routes.menu.getMenu);
+app.delete('/menu/:id', routes.menu.deleteMenu);
+app.get('/menus', routes.menu.listMenus);
+
 exports.app = functions.https.onRequest(app);
