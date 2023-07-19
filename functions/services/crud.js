@@ -10,7 +10,7 @@ function create(Type) {
     return db.collection(Type).add(req.body)
       .then((rec) => {
         console.log('Added document with ID: ', rec.id);
-        res.status(201).send(rec.id ? rec.id : '');
+        res.status(201).send(rec.id ? { id: rec.id } : '');
         return next();
       });
   };
