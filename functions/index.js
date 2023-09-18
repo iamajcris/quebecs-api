@@ -40,4 +40,8 @@ app.get('/menu/:id', routes.menu.getMenu);
 app.delete('/menu/:id', routes.menu.deleteMenu);
 app.get('/menus', routes.menu.listMenus);
 
+app.post('/customer', generateRefs('customer'), routes.customer.createCustomer);
+app.put('/customer/:id', routes.customer.updateCustomer);
+app.delete('/customer/:id', routes.customer.deleteCustomer);
+
 exports.app = functions.https.onRequest(app);
