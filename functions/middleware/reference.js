@@ -16,9 +16,16 @@ const generateRefs = (entity) =>
         return Promise.resolve(req.body);
       });
 
+    const createCustomerEntities = () => reference.create(entity)
+      .then(async (ident) => {
+        req.body.customerId = ident.serial;
+        return Promise.resolve(req.body);
+      });
+
     const mapper = {
       order: createOrderEntities,
       menu: createMenuEntities,
+      customer: createCustomerEntities,
     };
 
     if (mapper[entity]) {
