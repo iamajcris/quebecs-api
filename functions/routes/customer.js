@@ -13,7 +13,7 @@ const updateCustomer = update(collection.Customer);
 
 const deleteCustomer = deletion(collection.Customer);
 
-const listCustomers = list(collection.Menu);
+const listCustomers = list(collection.Customer);
 
 module.exports = {
   createCustomer,
