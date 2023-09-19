@@ -43,5 +43,6 @@ app.get('/menus', routes.menu.listMenus);
 app.post('/customer', generateRefs('customer'), routes.customer.createCustomer);
 app.put('/customer/:id', routes.customer.updateCustomer);
 app.delete('/customer/:id', routes.customer.deleteCustomer);
+app.get('/customers', routes.customer.listCustomers);
 
 exports.app = functions.https.onRequest(app);
