@@ -153,6 +153,31 @@ function findByFieldValue(Type) {
   };
 }
 
+function retrieveByFieldValue(Type) {
+  return (req, res, next) => {
+    const {
+      field,
+      id,
+    } = req.params;
+
+
+    return db.collection(Type)
+      .where(field, '==', id)
+      .get()
+      .then((snapshot) => {
+        if (snapshot.empty) {
+          res.status(200).send([]);
+          return next();
+        }
+
+        const doc = snapshot.docs[0];
+
+        res.status(200).send({ id: doc.id, ...doc.data()});
+        return next();
+      });
+  };
+}
+
 module.exports = {
   create,
   retrieve,
@@ -160,4 +185,5 @@ module.exports = {
   deletion,
   list,
   findByFieldValue,
+  retrieveByFieldValue,
 };

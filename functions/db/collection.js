@@ -3,4 +3,5 @@ module.exports = {
   Reference: 'references',
   Customer: 'customers',
   Menu: 'menus',
+  Types: 'types',
 };

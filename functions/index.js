@@ -45,4 +45,8 @@ app.put('/customer/:id', routes.customer.updateCustomer);
 app.delete('/customer/:id', routes.customer.deleteCustomer);
 app.get('/customers', routes.customer.listCustomers);
 
+app.post('/types', routes.types.createTypes);
+app.get('/types/:field/:id', routes.types.getTypes);
+app.delete('/customer/:id', routes.types.deleteTypes);
+
 exports.app = functions.https.onRequest(app);
