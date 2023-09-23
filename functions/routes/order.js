@@ -9,6 +9,7 @@ const {
 } = require('../services').crud;
 
 const { collection } = require('../db');
+const { findByFieldQuery } = require('../services/crud');
 
 const createOrder = create(collection.Order);
 
@@ -27,6 +28,8 @@ const listOrders = list(collection.Order);
 
 const findOrdersByFieldValue = findByFieldValue(collection.Order);
 
+const findOrdersByFieldQuery = findByFieldQuery(collection.Order);
+
 module.exports = {
   createOrder,
   updateOrder,
@@ -35,4 +38,5 @@ module.exports = {
   retrieveOrder,
   listOrders,
   findOrdersByFieldValue,
+  findOrdersByFieldQuery,
 };

@@ -1,13 +1,16 @@
 const { db } = require('../db');
-
+const _ = require('lodash');
+const { Timestamp } = require('firebase-admin/firestore');
 const { util } = require('../common');
+const { formatDataValues } = require('../common/util');
 
 function create(Type) {
   return (req, res, next) => {
     req.body.createdAt = util.getDateNow();
     req.body.updatedAt = util.getDateNow();
 
-    return db.collection(Type).add(req.body)
+    return db.collection(Type)
+      .add(formatDataValues(req.body))
       .then((rec) => {
         console.log('Added document with ID: ', rec.id);
         res.status(201).send(rec.id ? { id: rec.id } : '');
@@ -153,16 +156,39 @@ function findByFieldValue(Type) {
   };
 }
 
-function retrieveByFieldValue(Type) {
+function findByFieldQuery(Type) {
   return (req, res, next) => {
     const {
+      equal,
+      start,
+      end,
+    } = req.query;
+
+    const {
       field,
-      id,
     } = req.params;
 
+    let query = db.collection(Type);
 
-    return db.collection(Type)
-      .where(field, '==', id)
+    const sanitize = (val) => {
+      const dateFields = ['createdAt', 'updatedAt', 'date'];
+      if (dateFields.some((dt) => _.toLower(field).includes(dt))) {
+        return Timestamp.fromDate(new Date(val));
+      }
+      return val;
+    };
+
+    if (equal) {
+      query = query.where(field, '==', sanitize(equal));
+    }
+    if (start) {
+      query = query.where(field, '>=', sanitize(start));
+    }
+    if (end) {
+      query = query.where(field, '<=', sanitize(end));
+    }
+
+    return query
       .get()
       .then((snapshot) => {
         if (snapshot.empty) {
@@ -170,9 +196,18 @@ function retrieveByFieldValue(Type) {
           return next();
         }
 
-        const doc = snapshot.docs[0];
+        const recs = [];
+        snapshot.forEach((doc) => {
+          console.log(doc.data());
+          const data = util.formatSnapshot(doc.data());
 
-        res.status(200).send({ id: doc.id, ...doc.data()});
+          recs.push({
+            id: doc.id,
+            ...data,
+          });
+        });
+
+        res.status(200).send(recs);
         return next();
       });
   };
@@ -185,5 +220,5 @@ module.exports = {
   deletion,
   list,
   findByFieldValue,
-  retrieveByFieldValue,
+  findByFieldQuery,
 };

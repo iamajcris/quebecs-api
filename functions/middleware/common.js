@@ -7,6 +7,8 @@ const queryByPath = (path, id) => {
     return ['orderId', '==', id];
   case 'customer':
     return ['customerId', '==', id];
+  case 'types':
+    return ['slug', '==', id];
   default:
     return null;
   }

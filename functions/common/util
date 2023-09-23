@@ -4,7 +4,7 @@ const moment = require('moment-timezone');
 const { timezone } = require('../config/default.json');
 
 const formatSnapshot = (data) => _.mapValues(data, (value) => {
-  if (value && (value.seconds && value.nanoseconds)) {
+  if (value && !(_.isNil(value.seconds) && _.isNil(value.nanoseconds))) {
     return value.toDate();
   }
   return value;
@@ -12,7 +12,25 @@ const formatSnapshot = (data) => _.mapValues(data, (value) => {
 
 const getDateNow = () => moment.tz(new Date(), timezone);
 
+function formatDataValues(obj) {
+  // Create a new object to store the formatted properties.
+  const formattedProperties = {};
+
+  // Iterate over the properties and format the date values.
+  for (const key in obj) {
+    if (key.toLowerCase().endsWith('date')) {
+      formattedProperties[key] = moment(obj[key]).toDate();
+    } else {
+      formattedProperties[key] = obj[key];
+    }
+  }
+
+  // Return the formatted properties.
+  return formattedProperties;
+}
+
 module.exports = {
   formatSnapshot,
   getDateNow,
+  formatDataValues,
 };

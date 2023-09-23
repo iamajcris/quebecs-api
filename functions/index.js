@@ -10,6 +10,7 @@ const {
 } = require('./middleware');
 
 const routes = require('./routes');
+const { preloadTypes } = require('./middleware/order');
 
 const app = express();
 app.use(cors({ origin: true }));
@@ -30,9 +31,10 @@ app.post('/order', generateRefs('order'), routes.order.createOrder);
 app.put('/order/:id', routes.order.updateOrder);
 app.get('/order/:id', routes.order.getOrder);
 app.delete('/order/:id', routes.order.deleteOrder);
-app.get('/orders/:id', preloadOrder(), routes.order.retrieveOrder);
+app.get('/order/:id', preloadOrder(), routes.order.retrieveOrder);
 app.get('/orders', routes.order.listOrders);
 app.get('/orders/:field/:val', routes.order.findOrdersByFieldValue);
+app.get('/orders/:field', routes.order.findOrdersByFieldQuery);
 
 app.post('/menu', generateRefs('menu'), routes.menu.createMenu);
 app.put('/menu/:id', routes.menu.updateMenu);
@@ -46,7 +48,7 @@ app.delete('/customer/:id', routes.customer.deleteCustomer);
 app.get('/customers', routes.customer.listCustomers);
 
 app.post('/types', routes.types.createTypes);
-app.get('/types/:field/:id', routes.types.getTypes);
+app.get('/types/:id', preloadTypes(), routes.types.getTypes);
 app.delete('/customer/:id', routes.types.deleteTypes);
 
 exports.app = functions.https.onRequest(app);
