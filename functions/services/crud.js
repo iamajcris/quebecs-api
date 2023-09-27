@@ -63,8 +63,8 @@ function deletion(Type) {
 
     return db.collection(Type)
       .doc(req.params.id)
-      .delete({...req.body})
-      .then((rec) => {
+      .delete()
+      .then(() => {
         res.status(200).send();
         return next();
       })
