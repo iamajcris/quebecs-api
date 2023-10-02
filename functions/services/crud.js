@@ -158,7 +158,7 @@ function findByFieldValue(Type) {
 
 function findByFieldQuery(Type) {
   return (req, res, next) => {
-    const {
+    let {
       equal,
       start,
       end,
@@ -168,24 +168,32 @@ function findByFieldQuery(Type) {
       field,
     } = req.params;
 
-    let query = db.collection(Type);
-
-    const sanitize = (val) => {
+    const isDateParam = (fd) => {
       const dateFields = ['createdAt', 'updatedAt', 'date'];
-      if (dateFields.some((dt) => _.toLower(field).includes(dt))) {
-        return Timestamp.fromDate(new Date(val));
-      }
-      return val;
+      return dateFields.some((dt) => _.toLower(fd).includes(dt));
     };
 
+    let query = db.collection(Type).orderBy(field);
+
     if (equal) {
-      query = query.where(field, '==', sanitize(equal));
+      query = query.where(field, '==', equal);
     }
+
     if (start) {
-      query = query.where(field, '>=', sanitize(start));
+      if (isDateParam(field)) {
+        start = Timestamp.fromDate(new Date(new Date(start).setHours(0, 0, 0, 0)));
+      }
+
+      query = query.startAt(start);
     }
+
     if (end) {
-      query = query.where(field, '<=', sanitize(end));
+      if (isDateParam(field)) {
+        // set end of day to 23:59
+        end = Timestamp.fromDate(new Date(new Date(end).setHours(23, 59, 59, 999)));
+      }
+
+      query = query.endAt(end);
     }
 
     return query
