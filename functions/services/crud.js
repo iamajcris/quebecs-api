@@ -173,7 +173,7 @@ function findByFieldQuery(Type) {
       return dateFields.some((dt) => _.toLower(fd).includes(dt));
     };
 
-    let query = db.collection(Type).orderBy(field);
+    let query = db.collection(Type).orderBy(field, 'desc');
 
     if (equal) {
       query = query.where(field, '==', equal);
