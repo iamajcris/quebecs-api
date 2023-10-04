@@ -173,7 +173,7 @@ function findByFieldQuery(Type) {
       return dateFields.some((dt) => _.toLower(fd).includes(dt));
     };
 
-    let query = db.collection(Type).orderBy(field, 'desc');
+    let query = db.collection(Type);
 
     if (equal) {
       query = query.where(field, '==', equal);
@@ -181,20 +181,23 @@ function findByFieldQuery(Type) {
 
     if (start) {
       if (isDateParam(field)) {
-        start = Timestamp.fromDate(new Date(new Date(start).setHours(0, 0, 0, 0)));
+        // set start of day to 00:00
+        const startDt = new Date(new Date(start).setHours(0, 0, 0, 0));
+        start = Timestamp.fromDate(startDt);
       }
-
-      query = query.startAt(start);
+      query = query.where(field, '>=', start);
     }
 
     if (end) {
       if (isDateParam(field)) {
         // set end of day to 23:59
-        end = Timestamp.fromDate(new Date(new Date(end).setHours(23, 59, 59, 999)));
+        const endDt = new Date(new Date(end).setHours(23, 59, 59, 999));
+        end = Timestamp.fromDate(endDt);
       }
-
-      query = query.endAt(end);
+      query = query.where(field, '<=', end);
     }
+
+    query = query.orderBy(field, 'desc');
 
     return query
       .get()
