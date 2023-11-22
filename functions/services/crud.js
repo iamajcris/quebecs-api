@@ -32,7 +32,9 @@ function retrieve(Type) {
         if (!rec.exists) {
           return next(res.status(404));
         }
-        res.status(200).send(rec.data());
+
+        const data = util.formatSnapshot(rec.data());
+        res.status(200).send(data);
         return next();
       });
   };
@@ -44,7 +46,7 @@ function update(Type) {
 
     return db.collection(Type)
       .doc(req.params.id)
-      .update({...req.body})
+      .update(formatDataValues(req.body))
       .then((rec) => {
         if (!rec) {
           return next(res.status(404));
