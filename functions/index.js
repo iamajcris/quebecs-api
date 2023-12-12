@@ -51,6 +51,6 @@ app.get('/customers', routes.customer.listCustomers);
 
 app.post('/types', routes.types.createTypes);
 app.get('/types/:id', preloadTypes(), routes.types.getTypes);
-app.delete('/customer/:id', routes.types.deleteTypes);
+app.delete('/types/:id', routes.types.deleteTypes);
 
 exports.app = functions.https.onRequest(app);

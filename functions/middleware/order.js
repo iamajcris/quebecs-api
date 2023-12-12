@@ -8,7 +8,7 @@ function preloadOrder() {
 }
 
 function preloadTypes() {
-  return async function _preloadOrder(req, res, next) {
+  return async function _preloadTypes(req, res, next) {
     return common.preloadEntity(collection.Types, 'types', req, res, next);
   };
 }

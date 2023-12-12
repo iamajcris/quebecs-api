@@ -9,7 +9,9 @@ const { collection } = require('../db');
 const createTypes = create(collection.Types);
 
 function getTypes(req, res, next) {
-  res.status(200).send(_.head(req.preload.types));
+  const data = _.head(req.preload.types);
+
+  res.status(200).send(data.values);
   next();
 }
 
