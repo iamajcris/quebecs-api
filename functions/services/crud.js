@@ -164,6 +164,7 @@ function findByFieldQuery(Type) {
       equal,
       start,
       end,
+      orderType,
     } = req.query;
 
     const {
@@ -179,6 +180,10 @@ function findByFieldQuery(Type) {
 
     if (equal) {
       query = query.where(field, '==', equal);
+    }
+
+    if (orderType) {
+      query = query.where('orderType', '==', orderType);
     }
 
     if (start) {
