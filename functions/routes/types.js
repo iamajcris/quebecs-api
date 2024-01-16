@@ -2,6 +2,7 @@ const _ = require('lodash');
 const {
   create,
   deletion,
+  update,
 } = require('../services').crud;
 
 const { collection } = require('../db');
@@ -17,8 +18,11 @@ function getTypes(req, res, next) {
 
 const deleteTypes = deletion(collection.Types);
 
+const updateTypes = update(collection.Types);
+
 module.exports = {
   createTypes,
   getTypes,
   deleteTypes,
+  updateTypes,
 };

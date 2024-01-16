@@ -4,4 +4,5 @@ module.exports = {
   Customer: 'customers',
   Menu: 'menus',
   Types: 'types',
+  Widget: 'widgets',
 };

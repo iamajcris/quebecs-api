@@ -51,6 +51,12 @@ app.get('/customers', routes.customer.listCustomers);
 
 app.post('/types', routes.types.createTypes);
 app.get('/types/:id', preloadTypes(), routes.types.getTypes);
+app.put('/types/:id', routes.types.updateTypes);
 app.delete('/types/:id', routes.types.deleteTypes);
+
+app.post('/widgets', routes.widgets.createWidget);
+app.get('/widgets/:id', routes.widgets.getWidget);
+app.put('/widgets/:id', routes.widgets.updateWidget);
+app.delete('/widgets/:id', routes.widgets.deleteWidget);
 
 exports.app = functions.https.onRequest(app);

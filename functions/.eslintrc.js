@@ -18,6 +18,7 @@ module.exports = {
     'linebreak-style': 'off',
     'object-curly-spacing': 'off',
     'indent': ['error', 2],
+    'max-len': 100,
   },
   overrides: [
     {
