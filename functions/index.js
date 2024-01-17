@@ -58,5 +58,6 @@ app.post('/widgets', routes.widgets.createWidget);
 app.get('/widgets/:id', routes.widgets.getWidget);
 app.put('/widgets/:id', routes.widgets.updateWidget);
 app.delete('/widgets/:id', routes.widgets.deleteWidget);
+app.get('/widgets/:brand/slug/:slug', routes.widgets.getBrandWidget);
 
 exports.app = functions.https.onRequest(app);

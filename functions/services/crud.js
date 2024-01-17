@@ -231,6 +231,63 @@ function findByFieldQuery(Type) {
   };
 }
 
+async function findOne(collection, criteria) {
+  const collectionRef = db.collection(collection);
+  let query = collectionRef;
+
+  // Loop through the criteria object and add where clauses dynamically
+  _.keys(criteria).forEach((field) => {
+    query = query.where(field, '==', criteria[field]);
+  });
+
+  try {
+    const snapshot = await query.limit(1).get();
+
+    if (snapshot.empty) {
+      console.log('No matching documents.');
+      return null;
+    }
+
+    // Return the data of the first (and only) document in the result set
+    const doc = snapshot.docs[0];
+    return {
+      id: doc.id,
+      ...data,
+    };
+  } catch (error) {
+    console.error('Error getting document', error);
+    throw error;
+  }
+}
+
+async function findAll(collection, criteria) {
+  const collectionRef = db.collection(collection);
+let query = collectionRef;
+
+  // Loop through the criteria object and add where clauses dynamically
+  _.keys(criteria).forEach((field) => {
+    query = query.where(field, '==', criteria[field]);
+  });
+
+  try {
+    const snapshot = await query.get();
+
+    if (snapshot.empty) {
+      console.log('No matching documents.');
+      return [];
+    }
+
+    // Return an array of document data
+    return snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...data,
+    }));
+  } catch (error) {
+    console.error('Error getting document', error);
+    throw error;
+  }
+}
+
 module.exports = {
   create,
   retrieve,
@@ -239,4 +296,6 @@ module.exports = {
   list,
   findByFieldValue,
   findByFieldQuery,
+  findOne,
+  findAll,
 };
