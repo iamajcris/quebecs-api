@@ -48,6 +48,7 @@ app.post('/customer', generateRefs('customer'), routes.customer.createCustomer);
 app.put('/customer/:id', routes.customer.updateCustomer);
 app.delete('/customer/:id', routes.customer.deleteCustomer);
 app.get('/customers', routes.customer.listCustomers);
+app.get('/customer/by-contact/:id', routes.customer.findCustomerByContactId);
 
 app.post('/types', routes.types.createTypes);
 app.get('/types/:id', preloadTypes(), routes.types.getTypes);

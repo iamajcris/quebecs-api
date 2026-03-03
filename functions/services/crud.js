@@ -87,7 +87,7 @@ function list(Type) {
     const pageSize = ps || 20;
     const sortDir = (parseInt(sd, 10) || 1) < 1 ? 'desc' : 'asc';
     const sortBy = s || 'createdAt';
-
+    
     return db.collection(Type)
       .offset(Number(page) * Number(pageSize))
       .limit(Number(pageSize))
@@ -250,6 +250,8 @@ async function findOne(collection, criteria) {
 
     // Return the data of the first (and only) document in the result set
     const doc = snapshot.docs[0];
+    const data = util.formatSnapshot(doc.data());
+
     return {
       id: doc.id,
       ...data,
