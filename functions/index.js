@@ -37,6 +37,7 @@ app.get('/orders', routes.order.listOrders);
 app.get('/orders/:field/:val', routes.order.findOrdersByFieldValue);
 app.get('/orders/:field', routes.order.findOrdersByFieldQuery);
 
+app.get('/menu/latest', routes.menu.getLatestMenu);
 app.post('/menu', generateRefs('menu'), routes.menu.createMenu);
 app.put('/menu/:id', routes.menu.updateMenu);
 app.get('/menu/:id', routes.menu.getMenu);

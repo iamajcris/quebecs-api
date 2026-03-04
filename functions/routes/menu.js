@@ -1,13 +1,19 @@
+
+const {
+  crud,
+  menu: menuService,
+} = require('../services');
+
 const {
   create,
   update,
   retrieve,
   deletion,
   list,
-} = require('../services').crud;
+  findByFieldValue
+  } = crud;
 
 const { collection } = require('../db');
-const { findByFieldValue } = require('../services/crud');
 
 const createMenu = create(collection.Menu);
 
@@ -21,6 +27,18 @@ const listMenus = list(collection.Menu);
 
 const findMenusByFieldValue = findByFieldValue(collection.Menu);
 
+const getLatestMenu = async (req, res, next) => {
+  try {
+    const data = await menuService.getLatestMenu();
+    
+    res.send(data);
+    return next();
+  } catch (ex) {
+    console.error(ex, 'Get Latest Menu Error');
+    return next(ex);
+  } 
+}
+
 module.exports = {
   createMenu,
   updateMenu,
@@ -28,4 +46,5 @@ module.exports = {
   deleteMenu,
   listMenus,
   findMenusByFieldValue,
+  getLatestMenu,
 };
