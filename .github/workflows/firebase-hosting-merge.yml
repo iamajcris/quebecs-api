@@ -22,6 +22,8 @@ jobs:
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}"
+          channelId: live
+          projectId: quebecs-system
       - name: Create service account file
         run: |
           mkdir -p functions/config
