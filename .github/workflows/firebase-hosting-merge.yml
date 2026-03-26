@@ -24,9 +24,7 @@ jobs:
         run: |
           mkdir -p functions/config
           printf '%s' "${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}" > functions/config/service-account-key.json
-      - name: Set Google Application Credentials
-        run: echo "GOOGLE_APPLICATION_CREDENTIALS=${{ github.workspace }}/functions/config/service-account-key.json" >> $GITHUB_ENV
       - name: Build Cloud Functions
         run: cd functions && npm install
       - name: 'Deploy Clound Functions'
-        run: 'cd functions && npm run deploy'
+        run: 'cd functions && firebase deploy --only functions --token "${{ secrets.FIREBASE_TOKEN }}"'
