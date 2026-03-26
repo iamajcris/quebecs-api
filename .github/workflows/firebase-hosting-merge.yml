@@ -6,7 +6,7 @@ name: Deploy to Firebase Functions on merge
   workflow_dispatch:
   push:
     branches:
-      - feature/*
+      - main
     paths:
       - 'functions/**'
 jobs:
@@ -25,7 +25,7 @@ jobs:
           mkdir -p functions/config
           echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}" > functions/config/service-account-key.json
       - name: Set Google Application Credentials
-        run: echo "GOOGLE_APPLICATION_CREDENTIALS=functions/config/service-account-key.json" >> $GITHUB_ENV
+        run: echo "GOOGLE_APPLICATION_CREDENTIALS=${{ github.workspace }}/functions/config/service-account-key.json" >> $GITHUB_ENV
       - name: Build Cloud Functions
         run: cd functions && npm install
       - name: 'Deploy Clound Functions'
