@@ -37,4 +37,4 @@ jobs:
       - name: Build Cloud Functions
         run: cd functions && npm install
       - name: 'Deploy Clound Functions'
-        run: cd functions && firebase deploy --only functions --token "${{ secrets.FIREBASE_TOKEN }}"
+        run: cd functions && firebase deploy --only functions
